@@ -11,8 +11,9 @@ imshow(I), shg
 %imhist(I)
 
 %% Seuillage
-
 [H, W] = size(I);
+
+
 
 for i=1:H
     for j = 1:W
@@ -26,6 +27,7 @@ end
 imshow(I)
 
 %% Horizontal scan
+[H, W] = size(I);
 K = I;
 j = 1;
 a = 0;
@@ -83,7 +85,7 @@ end
 
 %% Calcul rayon du cercle
 %Synthétiser une carré (se)
-r = floor(sqrt(count/pi));
+r = floor(sqrt(surf/pi));
 
 se = zeros(2*r,2*r);
 
@@ -92,24 +94,37 @@ se = zeros(2*r,2*r);
 [h, w] = size(se);
 min_val = surf;
 
-for i = 1:(W-w)
-    for j = 1:(H-h)
-        I_temp = K;
-        for m = 1:h
-            for n = 1:w
-                I_temp(m-1+i,n-1+j) = I_temp(m-1+i,n-1+j) * se(m,n);
-            end
-        end
-        min_val = min(surf-calcSurface(I_temp), min_val);
+vect_resi = zeros(H*W,1);
+
+K = double(K)
+for i = 1:(H-h)
+    for j = 1:(W-w)
+        K(i:(h+i-1), j:(w+j-1)) = K(i:h+i-1, j:w+j-1).*se;
     end
 end
-seuil = 0.01;
-temp = seuil*surf;
-if min_val < temp
-    disp('It s a circle');
-else 
-    disp('Not a circle');
-end
+
+figure; imshow(K);shg
+
+
+% 
+% for i = 1:(W-w)
+%     for j = 1:(H-h)
+%         I_temp = K;
+%         for m = 1:h
+%             for n = 1:w
+%                 I_temp(m-1+i,n-1+j) = I_temp(m-1+i,n-1+j) * se(m,n);
+%             end
+%         end
+%         min_val = min(surf-calcSurface(I_temp), min_val);
+%     end
+% end
+% seuil = 0.01;
+% temp = seuil*surf;
+% if min_val < temp
+%     disp('It s a circle');
+% else 
+%     disp('Not a circle');
+% end
 
 
 
